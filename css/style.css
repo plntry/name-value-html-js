@@ -24,10 +24,10 @@ body {
     width: 20rem;
 }
 
-.test-form-body textarea {
+#name-value-list {
     width: 20rem;
     height: 15rem;
-    resize: none;
+    overflow-y: hidden;
 }
 
 .flex-row {

@@ -2,7 +2,7 @@ const addButton = document.getElementById('add-btn');
 const sortByNameButton = document.getElementById('sort-by-name-btn');
 const sortByValueButton = document.getElementById('sort-by-value-btn');
 const nameValueInput = document.getElementById('name-value');
-const nameValueList = document.getElementById('name-value-list');
+const nameValueList = document.querySelector('#name-value-list');
 
 function addNewNameValue() {
     const nameValue = nameValueInput.value;
@@ -13,25 +13,28 @@ function addNewNameValue() {
     // check if name and value contain only alpha-numeric characters
     const validStringRegex = /^[a-zA-ZА-Яа-яІіЇїЄєҐґ0-9]+$/;
 
-    const name = nameValue.split('=')[0].replace(/ /g, "");
-    const value = nameValue.split('=')[1].replace(/ /g, "");
-
     if (nameValue !== '') {
         const hasEqualSymbol = nameValue.match(equalSymbolRegex);
 
         if (hasEqualSymbol !== null) {
+            const name = nameValue.split('=')[0].replace(/ /g, "");
+            const value = nameValue.split('=')[1].replace(/ /g, "");
+
             const isValidName = name.match(validStringRegex);
             const isValidValue = value.match(validStringRegex);
 
             if (isValidName !== null && isValidValue !== null) {
-                nameValueList.value += name + '=' + value + '\n';
+                const option = document.createElement('option');
+                option.text = name + '=' + value;
+                option.value = name + '=' + value;
+                nameValueList.add(option);
                 nameValueInput.value = '';
             }
         }
     }
 }
 
-function compareNamesValues(a, b) {
+function compareNamesValues(a, b, sortByValue) {
     const nameA = a.split('=')[sortByValue ? 1 : 0].trim().toLowerCase();
     const nameB = b.split('=')[sortByValue ? 1 : 0].trim().toLowerCase();
   
@@ -47,22 +50,24 @@ function compareNamesValues(a, b) {
 }
 
 function sortNameValueList(sortByValue = false) {
-  const nameValueArray = nameValueList.value.trim().split('\n');
+  const nameValueArray = [];
 
-  nameValueArray.sort((a, b) => {
-    const aString = a.split('=')[sortByValue ? 1 : 0].toLowerCase();
-    const bString = b.split('=')[sortByValue ? 1 : 0].toLowerCase();
+  for (let i = 0; i < nameValueList.options.length; i++) {
+    nameValueArray.push(nameValueList.options[i].value);
+  }
 
-    if (aString < bString) {
-      return -1;
-    } else if (aString > bString) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
+  nameValueArray.sort((a, b) => compareNamesValues(a, b, sortByValue));
 
-  nameValueList.value = nameValueArray.join('\n').concat('\n');
+  nameValueList.options.length = 0;
+
+  for (let i = 0; i < nameValueArray.length; i++) {
+    const option = document.createElement('option');
+
+    option.text = nameValueArray[i];
+    option.value = nameValueArray[i];
+    
+    nameValueList.add(option);
+  }
 }
 
 addButton.addEventListener('click', addNewNameValue);
