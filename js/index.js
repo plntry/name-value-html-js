@@ -1,5 +1,6 @@
 const addButton = document.getElementById('add-btn');
-const sortButton = document.getElementById('sort-by-name-btn');
+const sortByNameButton = document.getElementById('sort-by-name-btn');
+const sortByValueButton = document.getElementById('sort-by-value-btn');
 const nameValueInput = document.getElementById('name-value');
 const nameValueList = document.getElementById('name-value-list');
 
@@ -30,9 +31,9 @@ function addNewNameValue() {
     }
 }
 
-function compareNames(a, b) {
-    const nameA = a.split('=')[0].trim().toLowerCase();
-    const nameB = b.split('=')[0].trim().toLowerCase();
+function compareNamesValues(a, b) {
+    const nameA = a.split('=')[sortByValue ? 1 : 0].trim().toLowerCase();
+    const nameB = b.split('=')[sortByValue ? 1 : 0].trim().toLowerCase();
   
     if (nameA < nameB) {
       return -1;
@@ -45,13 +46,25 @@ function compareNames(a, b) {
     return 0;
 }
 
-function sortByName() {
+function sortNameValueList(sortByValue = false) {
   const nameValueArray = nameValueList.value.trim().split('\n');
 
-  nameValueArray.sort(compareNames);
+  nameValueArray.sort((a, b) => {
+    const aString = a.split('=')[sortByValue ? 1 : 0].toLowerCase();
+    const bString = b.split('=')[sortByValue ? 1 : 0].toLowerCase();
+
+    if (aString < bString) {
+      return -1;
+    } else if (aString > bString) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
 
   nameValueList.value = nameValueArray.join('\n').concat('\n');
 }
 
 addButton.addEventListener('click', addNewNameValue);
-sortButton.addEventListener('click', sortByName);
+sortByNameButton.addEventListener('click', () => sortNameValueList(false));
+sortByValueButton.addEventListener('click', () => sortNameValueList(true));
