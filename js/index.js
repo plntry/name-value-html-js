@@ -8,9 +8,9 @@ import {
     closeBtn
 } from "./constants/index.js";
 import { addNewNameValue } from "./helpers/addNewNameValue.mjs";
-import { sortNameValueList } from "./helpers/sortNameValueList.js";
-import { deleteSelectedOptions } from "./helpers/deleteSelectedOptions.js";
-import { showListAsXml } from "./helpers/showListAsXml.js";
+import { sortNameValueList } from "./helpers/sortNameValueList.mjs";
+import { deleteSelectedOptions } from "./helpers/deleteSelectedOptions.mjs";
+import { showListAsXml } from "./helpers/showListAsXml.mjs";
 
 addButton.addEventListener('click', addNewNameValue);
 
